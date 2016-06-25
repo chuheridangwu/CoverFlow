@@ -16,6 +16,7 @@
 		A29C529B1D1E17DC00ACFFCD /* UIControllerViewTests.m in Sources */ = {isa = PBXBuildFile; fileRef = A29C529A1D1E17DC00ACFFCD /* UIControllerViewTests.m */; };
 		A29C52A61D1E17DC00ACFFCD /* UIControllerViewUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = A29C52A51D1E17DC00ACFFCD /* UIControllerViewUITests.m */; };
 		A29C52B51D1E1C5E00ACFFCD /* CollectionViewFlowLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = A29C52B41D1E1C5E00ACFFCD /* CollectionViewFlowLayout.m */; };
+		A29C52B81D1E545000ACFFCD /* HorizontalViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A29C52B71D1E545000ACFFCD /* HorizontalViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -54,6 +55,8 @@
 		A29C52A71D1E17DC00ACFFCD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A29C52B31D1E1C5E00ACFFCD /* CollectionViewFlowLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CollectionViewFlowLayout.h; sourceTree = "<group>"; };
 		A29C52B41D1E1C5E00ACFFCD /* CollectionViewFlowLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CollectionViewFlowLayout.m; sourceTree = "<group>"; };
+		A29C52B61D1E545000ACFFCD /* HorizontalViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HorizontalViewController.h; sourceTree = "<group>"; };
+		A29C52B71D1E545000ACFFCD /* HorizontalViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HorizontalViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -108,6 +111,8 @@
 				A29C52841D1E17DC00ACFFCD /* AppDelegate.m */,
 				A29C52861D1E17DC00ACFFCD /* ViewController.h */,
 				A29C52871D1E17DC00ACFFCD /* ViewController.m */,
+				A29C52B61D1E545000ACFFCD /* HorizontalViewController.h */,
+				A29C52B71D1E545000ACFFCD /* HorizontalViewController.m */,
 				A29C52B31D1E1C5E00ACFFCD /* CollectionViewFlowLayout.h */,
 				A29C52B41D1E1C5E00ACFFCD /* CollectionViewFlowLayout.m */,
 				A29C52891D1E17DC00ACFFCD /* Main.storyboard */,
@@ -278,6 +283,7 @@
 				A29C52881D1E17DC00ACFFCD /* ViewController.m in Sources */,
 				A29C52851D1E17DC00ACFFCD /* AppDelegate.m in Sources */,
 				A29C52B51D1E1C5E00ACFFCD /* CollectionViewFlowLayout.m in Sources */,
+				A29C52B81D1E545000ACFFCD /* HorizontalViewController.m in Sources */,
 				A29C52821D1E17DC00ACFFCD /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -504,6 +510,7 @@
 				A29C52AC1D1E17DC00ACFFCD /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		A29C52AD1D1E17DC00ACFFCD /* Build configuration list for PBXNativeTarget "UIControllerViewTests" */ = {
 			isa = XCConfigurationList;
@@ -512,6 +519,7 @@
 				A29C52AF1D1E17DC00ACFFCD /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		A29C52B01D1E17DC00ACFFCD /* Build configuration list for PBXNativeTarget "UIControllerViewUITests" */ = {
 			isa = XCConfigurationList;
@@ -520,6 +528,7 @@
 				A29C52B21D1E17DC00ACFFCD /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
