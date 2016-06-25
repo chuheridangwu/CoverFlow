@@ -111,10 +111,7 @@
 				A29C52841D1E17DC00ACFFCD /* AppDelegate.m */,
 				A29C52861D1E17DC00ACFFCD /* ViewController.h */,
 				A29C52871D1E17DC00ACFFCD /* ViewController.m */,
-				A29C52B61D1E545000ACFFCD /* HorizontalViewController.h */,
-				A29C52B71D1E545000ACFFCD /* HorizontalViewController.m */,
-				A29C52B31D1E1C5E00ACFFCD /* CollectionViewFlowLayout.h */,
-				A29C52B41D1E1C5E00ACFFCD /* CollectionViewFlowLayout.m */,
+				A29C52B91D1E560900ACFFCD /* 水平滚动布局方式 */,
 				A29C52891D1E17DC00ACFFCD /* Main.storyboard */,
 				A29C528C1D1E17DC00ACFFCD /* Assets.xcassets */,
 				A29C528E1D1E17DC00ACFFCD /* LaunchScreen.storyboard */,
@@ -148,6 +145,17 @@
 				A29C52A71D1E17DC00ACFFCD /* Info.plist */,
 			);
 			path = UIControllerViewUITests;
+			sourceTree = "<group>";
+		};
+		A29C52B91D1E560900ACFFCD /* 水平滚动布局方式 */ = {
+			isa = PBXGroup;
+			children = (
+				A29C52B61D1E545000ACFFCD /* HorizontalViewController.h */,
+				A29C52B71D1E545000ACFFCD /* HorizontalViewController.m */,
+				A29C52B31D1E1C5E00ACFFCD /* CollectionViewFlowLayout.h */,
+				A29C52B41D1E1C5E00ACFFCD /* CollectionViewFlowLayout.m */,
+			);
+			name = "水平滚动布局方式";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
