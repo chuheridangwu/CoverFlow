@@ -8,6 +8,17 @@
 
 #import <UIKit/UIKit.h>
 
-@interface WaterFallViewLayout : UICollectionViewLayout
+@class WaterFallViewLayout;
+@protocol WaterFallViewLayoutDelegate <NSObject>
+@required
+- (CGFloat)waterflowLayout:(WaterFallViewLayout *)waterflowLayout heightForItemAtIndex:(NSUInteger)index itemWidth:(CGFloat)itemWidth;
+@optional
+- (CGFloat)columnCountInWaterflowLayout:(WaterFallViewLayout *)waterflowLayout;
+- (CGFloat)columnMarginInWaterflowLayout:(WaterFallViewLayout *)waterflowLayout;
+- (CGFloat)rowMarginInWaterflowLayout:(WaterFallViewLayout *)waterflowLayout;
+- (UIEdgeInsets)edgeInsetsInWaterflowLayout:(WaterFallViewLayout *)waterflowLayout;
+@end
 
+@interface WaterFallViewLayout : UICollectionViewLayout
+@property (nonatomic,weak)id<WaterFallViewLayoutDelegate> delegate;
 @end

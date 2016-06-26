@@ -9,23 +9,68 @@
 #import "WaterFallViewLayout.h"
 
 /** 默认的列数 */
-static const NSInteger XBDefaultColumnCount = 3;
+static const NSInteger XMGDefaultColumnCount = 3;
 /** 每一列之间的间距 */
-static const CGFloat XBDefaultColumnMargin = 10;
+static const CGFloat XMGDefaultColumnMargin = 10;
 /** 每一行之间的间距 */
-static const CGFloat XBDefaultRowMargin = 10;
-/** 边缘间距，使用结构体的写法，相当于 UIEdgeInsetsMake(10, 10, 10, 10); */
-static const UIEdgeInsets XBDefaultEdgeInsets = {10, 10, 10, 10};
+static const CGFloat XMGDefaultRowMargin = 10;
+/** 边缘间距 */
+static const UIEdgeInsets XMGDefaultEdgeInsets = {10, 10, 10, 10};
 
-@interface WaterFallViewLayout ()
+@interface WaterFallViewLayout()
 /** 存放所有cell的布局属性 */
 @property (nonatomic, strong) NSMutableArray *attrsArray;
 /** 存放所有列的当前高度 */
 @property (nonatomic, strong) NSMutableArray *columnHeights;
+/** 内容的高度 */
+@property (nonatomic, assign) CGFloat contentHeight;
+
+- (CGFloat)rowMargin;
+- (CGFloat)columnMargin;
+- (NSInteger)columnCount;
+- (UIEdgeInsets)edgeInsets;
 @end
 
 @implementation WaterFallViewLayout
 
+#pragma mark - 常见数据处理
+- (CGFloat)rowMargin
+{
+    if ([self.delegate respondsToSelector:@selector(rowMarginInWaterflowLayout:)]) {
+        return [self.delegate rowMarginInWaterflowLayout:self];
+    } else {
+        return XMGDefaultRowMargin;
+    }
+}
+
+- (CGFloat)columnMargin
+{
+    if ([self.delegate respondsToSelector:@selector(columnMarginInWaterflowLayout:)]) {
+        return [self.delegate columnMarginInWaterflowLayout:self];
+    } else {
+        return XMGDefaultColumnMargin;
+    }
+}
+
+- (NSInteger)columnCount
+{
+    if ([self.delegate respondsToSelector:@selector(columnCountInWaterflowLayout:)]) {
+        return [self.delegate columnCountInWaterflowLayout:self];
+    } else {
+        return XMGDefaultColumnCount;
+    }
+}
+
+- (UIEdgeInsets)edgeInsets
+{
+    if ([self.delegate respondsToSelector:@selector(edgeInsetsInWaterflowLayout:)]) {
+        return [self.delegate edgeInsetsInWaterflowLayout:self];
+    } else {
+        return XMGDefaultEdgeInsets;
+    }
+}
+
+#pragma mark - 懒加载
 - (NSMutableArray *)columnHeights
 {
     if (!_columnHeights) {
@@ -42,86 +87,104 @@ static const UIEdgeInsets XBDefaultEdgeInsets = {10, 10, 10, 10};
     return _attrsArray;
 }
 
-// 初始化
-- (void)prepareLayout{
+/**
+ * 初始化
+ */
+- (void)prepareLayout
+{
     [super prepareLayout];
+    
+    self.contentHeight = 0;
     
     // 清除以前计算的所有高度
     [self.columnHeights removeAllObjects];
-    for (NSInteger i = 0; i < XBDefaultColumnCount; i++) {
-        [self.columnHeights addObject:@(XBDefaultEdgeInsets.top)];
+    for (NSInteger i = 0; i < self.columnCount; i++) {
+        [self.columnHeights addObject:@(self.edgeInsets.top)];
     }
     
-    //清楚以前的布局属性
+    // 清除之前所有的布局属性
     [self.attrsArray removeAllObjects];
-     NSInteger count = [self.collectionView numberOfItemsInSection:0];
+    // 开始创建每一个cell对应的布局属性
+    NSInteger count = [self.collectionView numberOfItemsInSection:0];
     for (NSInteger i = 0; i < count; i++) {
-        //创建位置
+        // 创建位置
         NSIndexPath *indexPath = [NSIndexPath indexPathForItem:i inSection:0];
-       //获取indexPatch对应的布局属性
+        // 获取indexPath位置cell对应的布局属性
         UICollectionViewLayoutAttributes *attrs = [self layoutAttributesForItemAtIndexPath:indexPath];
-        
-        [self.attrsArray  addObject:attrs];
+        [self.attrsArray addObject:attrs];
     }
-    
- 
 }
 
 /**
  * 决定cell的排布
  */
-
-- (NSArray<UICollectionViewLayoutAttributes *> *)layoutAttributesForElementsInRect:(CGRect)rect{
+- (NSArray *)layoutAttributesForElementsInRect:(CGRect)rect
+{
     return self.attrsArray;
 }
 
-// 返回indexPath位置对应的cell属性，算坐标应该在这里算
-- (UICollectionViewLayoutAttributes *)layoutAttributesForItemAtIndexPath:(NSIndexPath *)indexPath{
-    //创建布局属性
+/**
+ * 返回indexPath位置cell对应的布局属性
+ */
+- (UICollectionViewLayoutAttributes *)layoutAttributesForItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    // 创建布局属性
     UICollectionViewLayoutAttributes *attrs = [UICollectionViewLayoutAttributes layoutAttributesForCellWithIndexPath:indexPath];
-    //设置布局属性的frame
-    CGFloat collectioViewW = self.collectionView.bounds.size.width;
-    CGFloat W = (collectioViewW - XBDefaultEdgeInsets.left - XBDefaultEdgeInsets.right - (XBDefaultColumnCount - 1) * XBDefaultColumnMargin) / XBDefaultColumnCount;
-    CGFloat h = 50 + arc4random_uniform(100);;
     
-    //瀑布流就是将cell放在上一行最短的那一列，只要找到是最短的，在第几行，就可以确定XY
-    //找出高度最短的那一列
-     NSInteger destColum = 0;
-    CGFloat minColumnHeight = [self.columnHeights[0] doubleValue];;
-    for (NSInteger i = 1; i < XBDefaultColumnCount; i++) {
-        //取得第一列的高度
-        CGFloat columnHeight = [self.columnHeights[i] doubleValue];
-        if (minColumnHeight > columnHeight) {
-            minColumnHeight = columnHeight;
-            destColum = i;
-        }
-    }
-  
+    // collectionView的宽度
+    CGFloat collectionViewW = self.collectionView.frame.size.width;
     
-    CGFloat x = XBDefaultEdgeInsets.left + destColum * (W + XBDefaultColumnMargin);
-    CGFloat y = minColumnHeight;
-    if (y != XBDefaultEdgeInsets.top) {
-        y += XBDefaultRowMargin;
-    }
-    attrs.frame = CGRectMake(x, y, W, h);
+    // 设置布局属性的frame
+    CGFloat w = (collectionViewW - self.edgeInsets.left - self.edgeInsets.right - (self.columnCount - 1) * self.columnMargin) / self.columnCount;
+    CGFloat h = [self.delegate waterflowLayout:self heightForItemAtIndex:indexPath.item itemWidth:w];
     
-    // 更新最短那列的高度
-    self.columnHeights[destColum] = @(CGRectGetMaxY(attrs.frame));
-    return attrs;
-}
-
-- (CGSize)collectionViewContentSize{
-    CGFloat maxColumnHeight = [self.columnHeights[0] doubleValue];
-    for (NSInteger i = 1; i < XBDefaultColumnCount; i++) {
+    // 找出高度最短的那一列
+    NSInteger destColumn = 0;
+    CGFloat minColumnHeight = [self.columnHeights[0] doubleValue];
+    for (NSInteger i = 1; i < self.columnCount; i++) {
         // 取得第i列的高度
         CGFloat columnHeight = [self.columnHeights[i] doubleValue];
         
-        if (maxColumnHeight < columnHeight) {
-            maxColumnHeight = columnHeight;
+        if (minColumnHeight > columnHeight) {
+            minColumnHeight = columnHeight;
+            destColumn = i;
         }
     }
-    return CGSizeMake(0, maxColumnHeight + XBDefaultEdgeInsets.bottom);
+    
+    CGFloat x = self.edgeInsets.left + destColumn * (w + self.columnMargin);
+    CGFloat y = minColumnHeight;
+    if (y != self.edgeInsets.top) {
+        y += self.rowMargin;
+    }
+    attrs.frame = CGRectMake(x, y, w, h);
+    
+    // 更新最短那列的高度
+    self.columnHeights[destColumn] = @(CGRectGetMaxY(attrs.frame));
+    
+    // 记录内容的高度
+    CGFloat columnHeight = [self.columnHeights[destColumn] doubleValue];
+    if (self.contentHeight < columnHeight) {
+        self.contentHeight = columnHeight;
+    }
+    return attrs;
 }
+
+- (CGSize)collectionViewContentSize
+{
+    //    CGFloat maxColumnHeight = [self.columnHeights[0] doubleValue];
+    //    for (NSInteger i = 1; i < self.columnCount; i++) {
+    //        // 取得第i列的高度
+    //        CGFloat columnHeight = [self.columnHeights[i] doubleValue];
+    //
+    //        if (maxColumnHeight < columnHeight) {
+    //            maxColumnHeight = columnHeight;
+    //        }
+    //    }
+    return CGSizeMake(0, self.contentHeight + self.edgeInsets.bottom);
+}
+
+@end
+
 
 /*
  
@@ -141,5 +204,3 @@ static const UIEdgeInsets XBDefaultEdgeInsets = {10, 10, 10, 10};
  }
  }];
  */
-
-@end
